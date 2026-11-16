@@ -17,7 +17,7 @@ flowchart TD
     E --> F["Step 6: Self-Verification & Majority Voting<br/>(3×3 Pip Grid Matching + Multi-Frame Vote + Confidence)"]
     F -->|Verified Value 1–6| G["Step 7: Snakes & Ladders Game & UI<br/>(PyGame Board + OpenCV Annotated Feed + Override)"]
     F -->|Uncertain Read| H["Reject & Prompt Re-Roll"]
-    G --> I["Step 8: Evaluation & Ablation Suite<br/>(≥150 Rolls, Confusion Matrix, Rejection Curve, FPS)"]
+    G --> I["Step 8: Evaluation & Ablation Suite<br/>(≥100 Rolls, Confusion Matrix, Rejection Curve, FPS)"]
 ```
 
 ---
@@ -222,11 +222,11 @@ Connect the verified dice reader to a crisp, ~150-line Snakes and Ladders game e
 ## Step 8: Comprehensive Evaluation & Ablation Suite
 
 ### Objective
-Quantitatively evaluate the system against all project targets across $\ge 150$ physical rolls, perform the required ablation studies, and generate publication-ready plots and error analyses.
+Quantitatively evaluate the system against all project targets across $\ge 100$ physical rolls, perform the required ablation studies, and generate publication-ready plots and error analyses.
 
 ### Key Tasks
 1. **Ground-Truth Roll Dataset Collection (`data/eval_rolls/`):**
-   - Record at least **150 physical rolls** (balanced across faces 1–6, varied landing positions within the ROI, and controlled vs. challenging lighting levels) with hand-recorded ground-truth labels (`ground_truth.csv`).
+   - Record at least **100 physical rolls** (balanced across faces 1–6, varied landing positions within the ROI, and controlled vs. challenging lighting levels) with hand-recorded ground-truth labels (`ground_truth.csv`).
 2. **Automated Benchmark Runner (`src/evaluation/benchmark.py`):**
    - Replay recorded roll sequences through configurable pipeline flags:
      - `use_blob_detector: bool`
