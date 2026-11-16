@@ -17,7 +17,7 @@ This folder contains the foundational concept, literature review, architectural 
      - **Step 5:** Pip Segmentation & Dual-Method Counting (`SimpleBlobDetector` + Connected Components)
      - **Step 6:** Geometric $3 \times 3$ Pip Layout Verification & Multi-Frame Majority Voting
      - **Step 7:** Minimal Snakes and Ladders Game Engine (~150 LOC) & Unified OpenCV/PyGame GUI
-     - **Step 8:** Comprehensive Evaluation & Ablation Suite ($\ge 150$ Rolls, Accuracy-Rejection Curve, FPS)
+     - **Step 8:** Comprehensive Evaluation & Ablation Suite ($\ge 100$ Rolls, Accuracy-Rejection Curve, FPS)
 
 2. **[2. Related Literature (`02-related-literature.md`)](./02-related-literature.md)**
    - Reviews foundational classical CV operators (Otsu & adaptive thresholding, mathematical morphology, contour analysis, connected components, blob detection).
