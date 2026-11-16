@@ -102,7 +102,7 @@ cv-dice-snakes-ladders/
 │   ├── ui/
 │   │   └── app.py                             # Unified OpenCV + PyGame window & manual overrides
 │   └── evaluation/
-│       ├── benchmark.py                       # Batch evaluation & ablation runner (>=150 rolls)
+│       ├── benchmark.py                       # Batch evaluation & ablation runner (>=100 rolls)
 │       └── plots.py                           # Confusion matrix & accuracy-rejection curve generator
 ├── data/
 │   ├── recordings/                            # Recorded roll videos (.mp4)
@@ -121,7 +121,7 @@ cv-dice-snakes-ladders/
 
 | Metric | Target Threshold | Measurement Protocol |
 | :--- | :--- | :--- |
-| **Pip-Read Accuracy (Settled Dice)** | **$\ge 95\%$** | Measured over $\ge 150$ physical rolls across faces 1–6, reported jointly with the rejection rate. |
+| **Pip-Read Accuracy (Settled Dice)** | **$\ge 95\%$** | Measured over $\ge 100$ physical rolls across faces 1–6, reported jointly with the rejection rate. |
 | **Real-Time Throughput (FPS)** | **$\ge 15\text{ FPS}$** | End-to-end loop (acquisition + CV pipeline + UI rendering) measured on the development laptop. |
 | **Roll Event Reliability** | Near-zero premature reads | Count of premature reads (reading while die is still moving) and missed settles (failing to trigger when stopped). |
 
