@@ -1,0 +1,23 @@
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Python cache & artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Recorded video clips (large binary files)
+data/recordings/*.mp4
+data/recordings/*.avi
+data/recordings/*.mkv
+data/recordings/*_timestamps.csv
+
+# OS / IDE
+.DS_Store
+.vscode/
+.idea/
