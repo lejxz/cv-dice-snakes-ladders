@@ -63,11 +63,24 @@ class CameraConfig:
 
 
 @dataclass
+class PreprocessingConfig:
+    """Parameters for dual-resolution frame preprocessing."""
+
+    use_roi: bool = True
+    detection_scale: float = 0.5
+    detection_blur_ksize: Tuple[int, int] = (5, 5)
+    detection_blur_sigma: float = 1.2
+    recognition_blur_ksize: Tuple[int, int] = (3, 3)
+    recognition_blur_sigma: float = 0.8
+
+
+@dataclass
 class CalibrationConfig:
     """Top-level persisted calibration settings."""
 
     camera: CameraConfig = field(default_factory=CameraConfig)
     roi: ROIConfig = field(default_factory=ROIConfig)
+    preprocessing: PreprocessingConfig = field(default_factory=PreprocessingConfig)
 
     def to_dict(self) -> dict:
         return asdict(self)
@@ -76,9 +89,15 @@ class CalibrationConfig:
     def from_dict(cls, data: dict) -> "CalibrationConfig":
         cam_data = data.get("camera", {})
         roi_data = data.get("roi", {})
+        prep_data = dict(data.get("preprocessing", {}))
+        if "detection_blur_ksize" in prep_data:
+            prep_data["detection_blur_ksize"] = tuple(prep_data["detection_blur_ksize"])
+        if "recognition_blur_ksize" in prep_data:
+            prep_data["recognition_blur_ksize"] = tuple(prep_data["recognition_blur_ksize"])
         return cls(
             camera=CameraConfig(**cam_data),
             roi=ROIConfig(**roi_data),
+            preprocessing=PreprocessingConfig(**prep_data),
         )
 
 
