@@ -36,11 +36,11 @@ Establish the Python environment, project directory structure, and a unified vid
    - Enforce resolution negotiation ($1920 \times 1080$ preferred, fallback $1280 \times 720$) and target 30 FPS.
    - Attempt programmatic lock of auto-exposure, autofocus, and auto-white-balance via OpenCV `CAP_PROP_*` properties, coupled with a calibration check HUD.
 3. **Play-Area Region of Interest (ROI) & Recording Utility (`src/acquisition/recorder.py`):**
-   - Configurable static rectangular ROI (`roi_x, roi_y, roi_w, roi_h`) isolating the dark matte rolling tray.
-   - Built-in raw video recorder to save live roll sessions with frame timestamps for offline evaluation and tuning of $N$ (settle frame count).
+   - Configurable static rectangular ROI (`x, y, width, height`) isolating the dark matte rolling tray.
+   - Built-in raw `.mp4` video recorder (`VideoRecorder`) to save live roll sessions for offline evaluation and tuning of $N$ (settle frame count).
 
 ### Deliverable Criterion
-- Running the acquisition script displays a live or recorded feed at $\ge 25\text{ FPS}$ with an overlaid ROI boundary and saves clean 720p/1080p test clips to `data/recordings/`.
+- Running `python -m src.acquisition.calibrate` displays a live or recorded feed at $\ge 25\text{ FPS}$ with an overlaid ROI boundary and saves clean 720p/1080p `.mp4` clips to `data/recordings/`.
 
 ---
 
@@ -51,14 +51,14 @@ Prepare each incoming frame for fast coarse die localization while preserving cr
 
 ### Key Tasks
 1. **ROI Cropping & Color Conversion (`src/vision/preprocessing.py`):**
-   - Crop incoming full-resolution frame $I_{\text{full}}$ to the play-area ROI.
-   - Convert the ROI to single-channel 8-bit grayscale $I_{\text{gray}}$.
-2. **Dual-Stream Generation:**
-   - **Detection Stream (Downscaled):** Resize $I_{\text{gray}}$ by scale factor $s = 0.5$ (e.g., $960 \times 540$ from $1920 \times 1080$) and apply a $5 \times 5$ Gaussian blur ($\sigma = 1.2$) to suppress sensor grain and matte surface texture.
-   - **Recognition Stream (Full-Resolution):** Retain the unscaled grayscale ROI $I_{\text{gray}}$ with a light $3 \times 3$ Gaussian blur ($\sigma = 0.8$) so individual pips (typically 6–15 pixels in diameter) retain sharp edges.
+   - Crop incoming full-resolution frame to the play-area ROI and convert to 8-bit grayscale.
+2. **Dual-Stream Generation (`preprocess_frame`):**
+   - **Detection Stream (`detection_gray`):** Downscale by `scale = 0.5` (e.g., $960 \times 540$ from $1920 \times 1080$) and apply a $5 \times 5$ Gaussian blur ($\sigma = 1.2$) to suppress sensor grain.
+   - **Recognition Stream (`recognition_gray`):** Keep the full-resolution grayscale ROI with a light $3 \times 3$ Gaussian blur ($\sigma = 0.8$) so individual pips retain sharp edges.
+   - Provide coordinate helpers (`to_roi_coords`, `to_full_coords`, `scale_rect_to_roi`) using `scale`.
 
 ### Deliverable Criterion
-- Unit benchmark confirms preprocessing takes $< 2\text{ ms}$ per frame on the development laptop and outputs aligned coordinate scaling factors between the downscaled and full-resolution frames.
+- Unit benchmark confirms `preprocess_frame()` runs in $< 2\text{ ms}$ per frame and maps coordinates accurately between downscaled and full-resolution frames.
 
 ---
 
