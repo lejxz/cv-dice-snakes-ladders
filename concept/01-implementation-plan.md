@@ -12,7 +12,7 @@ This document separates the implementation of the system into **8 sequential, te
 flowchart TD
     A["Step 1: Video Acquisition & Calibration<br/>(1080p/720p @ ~30 FPS, Locked Camera, ROI)"] --> B["Step 2: Frame Preprocessing<br/>(Grayscale, Gaussian Blur, Dual-Res Copy)"]
     B --> C["Step 3: Classical Die Detection<br/>(Otsu/Adaptive Threshold, Morphology, Rotated Rect)"]
-    C --> D["Step 4: Roll Event Detection (FSM)<br/>(Track Centroid Δ < ε for N Frames)"]
+    C --> D["Step 4: Roll Event Detection (FSM)"]
     D -->|Settled Frame| E["Step 5: Pip Recognition & Dual-Counting<br/>(Upright Crop, Blob Detection + Connected Components)"]
     E --> F["Step 6: Self-Verification & Majority Voting<br/>(3×3 Pip Grid Matching + Multi-Frame Vote + Confidence)"]
     F -->|Verified Value 1–6| G["Step 7: Snakes & Ladders Game & UI<br/>(PyGame Board + OpenCV Annotated Feed + Override)"]
