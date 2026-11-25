@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import csv
 import subprocess
 import sys
 from pathlib import Path
@@ -9,7 +10,7 @@ from pathlib import Path
 import numpy as np
 
 from src.acquisition.camera import VideoStream
-from src.acquisition.recorder import VideoRecorder
+from src.acquisition.recorder import GroundTruthLogger, VideoRecorder
 from src.config import AppConfig, ROIConfig, load_config, save_config
 
 
@@ -90,3 +91,36 @@ def test_calibrate_headless_cli(tmp_path: Path) -> None:
     assert result.returncode == 0, f"CLI failed:\n{result.stderr}"
     assert "Processed 30 frames" in result.stdout
     assert len(list(tmp_path.glob("*.mp4"))) == 1
+
+
+def test_ground_truth_logger_and_undo(tmp_path: Path) -> None:
+    csv_path = tmp_path / "ground_truth.csv"
+    clip_a = tmp_path / "roll_01.mp4"
+    clip_b = tmp_path / "roll_02.mp4"
+
+    logger = GroundTruthLogger(csv_path)
+    assert logger.total_count == 0
+
+    logger.log_roll(clip_a, value=4, frame_idx=45, roll_index=1)
+    logger.log_roll(clip_a, value=6, frame_idx=120, roll_index=2)
+    logger.log_roll(clip_b, value=2, frame_idx=30, roll_index=1)
+    assert logger.total_count == 3
+
+    # Undoing restricted to clip_a should not delete clip_b's latest row
+    assert logger.undo_last(clip_a) is None
+    assert logger.total_count == 3
+
+    # Undoing clip_b removes its row
+    assert logger.undo_last(clip_b) == 2
+    assert logger.total_count == 2
+
+    # Re-instantiating counts existing rows accurately
+    reloaded = GroundTruthLogger(csv_path)
+    assert reloaded.total_count == 2
+
+    with csv_path.open("r", newline="", encoding="utf-8") as f:
+        rows = list(csv.DictReader(f))
+    assert [(r["video_file"], r["roll_index"], r["ground_truth"]) for r in rows] == [
+        ("roll_01.mp4", "1", "4"),
+        ("roll_01.mp4", "2", "6"),
+    ]
