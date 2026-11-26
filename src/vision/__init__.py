@@ -10,12 +10,25 @@ from src.vision.pip_detector import (
 )
 from src.vision.preprocessing import PreprocessedFrame, preprocess_frame
 from src.vision.roll_tracker import RollTracker
+from src.vision.verifier import (
+    CANONICAL_PATTERNS,
+    FrameVerdict,
+    RollResult,
+    RollVoter,
+    verify_frame,
+    verify_layout,
+    vote_roll,
+)
 
 __all__ = [
+    "CANONICAL_PATTERNS",
     "DieDetection",
+    "FrameVerdict",
     "PipDetection",
     "PreprocessedFrame",
+    "RollResult",
     "RollTracker",
+    "RollVoter",
     "crop_upright_face",
     "detect_die",
     "detect_pips",
@@ -23,4 +36,7 @@ __all__ = [
     "detect_pips_cc",
     "preprocess_frame",
     "segment_pips",
+    "verify_frame",
+    "verify_layout",
+    "vote_roll",
 ]
